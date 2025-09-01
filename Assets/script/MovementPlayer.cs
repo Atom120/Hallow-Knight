@@ -11,7 +11,22 @@ public class MovementPlayer : MonoBehaviour
 {
     //Variables
 
+    //public - Accesible desde cualquier script y clase
+    //private - Solo accesible desde la misma clase
 
+    /*tipos de datos
+     * int - Entero, numeros sin decimales
+     * float - Numero con decimales
+     * string - Cadena de texto
+     * bool - Booleano, true o false
+     * char - Caracter, una sola letra o simbolo
+     * double - Numero con decimales de mayor precision
+     * long - Entero de mayor rango
+     * short - Entero de menor rango
+     */
+
+    public int numero = 0; // Entero
+    public float decimalConPunto = 0.0f; // Numero con decimales la f es de float o flotante
     //end Variables
 
     // Donde epieza el Frame 1. Frame 2 dejo de llamrse
