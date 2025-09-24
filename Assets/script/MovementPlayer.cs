@@ -21,7 +21,6 @@ public class MovementPlayer : MonoBehaviour
     //public - Accesible desde cualquier script y clase
     public Transform transformPlayer; // Transform - Componente que almacena la posicion, rotacion y escala de un objeto
     public Rigidbody2D rigidbody2DPlayer; // Rigidbody2D - Componente que permite a un objeto 2D ser afectado por la fisica
-    public bool isGrounded; // Booleano, true o false
     public BoxCollider2D boxCollider2DPlayer; // BoxCollider2D - Componente que define una caja para colisiones en 2D
     public SpriteRenderer spriteRendererPlayer; // SpriteRenderer - Componente que renderiza un sprite en 2D
 
@@ -38,6 +37,7 @@ public class MovementPlayer : MonoBehaviour
      * short - Entero de menor rango
      */
 
+    public bool isGrounded; // Booleano, true o false
     public int velocity = 0; // Entero
     public float jump = 0.0f; // Numero con decimales la f es de float o flotante
     //end Variables
@@ -63,10 +63,10 @@ public class MovementPlayer : MonoBehaviour
     //necesita un rigidbody para poder dectetar colisiones
     public void OnCollisionEnter2D(Collision2D collision)// Llamada al metodo onCollisionEnter2D
     {
-        if (collision.gameObject.CompareTag("Ground")) // CompareTag - Compara el tag del objeto con el tag especificado
+        if (collision.gameObject.CompareTag(GameReferences.Tags.Ground)) // CompareTag - Compara el tag del objeto con el tag especificado
         {
             isGrounded = true;
-            print("Tocando el suelo");
+            print(GameReferences.Textos.Suelo);
         }
 
     }
@@ -83,7 +83,7 @@ public class MovementPlayer : MonoBehaviour
            // transformPlayer.position += new Vector3(-1, 0, 0) * Time.deltaTime; // Vector3 - Estructura que representa un vector en 3D, Time.deltaTime - Tiempo que ha pasado desde el ultimo frame
            rigidbody2DPlayer.AddForce(Vector2.left * velocity); // AddForce - Aplica una fuerza al Rigidbody2D, Vector2 - Estructura que representa un vector en 2D
            spriteRendererPlayer.flipX = false; // flipX - Voltea el sprite en el eje X
-            print("Vamos a la izquierda");
+            print(GameReferences.Textos.Izquierda);
         }
 
 
@@ -91,13 +91,13 @@ public class MovementPlayer : MonoBehaviour
         {
            // transformPlayer.position += new Vector3(1, 0, 0) * Time.deltaTime;
             rigidbody2DPlayer.AddForce(Vector2.right * velocity);
-            print("Vamos a la derecha");
+            print(GameReferences.Textos.Derecha);
             spriteRendererPlayer.flipX = true; // flipX - Voltea el sprite en el eje X
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
         {
-            print("Salto");
+            print(GameReferences.Textos.Salto);
             Jump();
         }
         //end update
