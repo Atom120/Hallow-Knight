@@ -1,53 +1,73 @@
 using UnityEngine;
 
-public class MovemntEnemy : MonoBehaviour
+public class Crowler : MonoBehaviour
 {
-    //No slaga en el inspector [SerializeField] private float speedRun = 4f;
-    [SerializeField] private float speedWalk;
-    [SerializeField] private Transform controladorSuelo;//para saber donde esta
-    [SerializeField] private float distanciaSuelo;//La del controlador hacía abajo
-    [SerializeField] private bool moviminetoDerecha;//para saber que es suelo
+    [Header("Movimiento")]
+    [SerializeField]
+    private float speed = 2f;
+    public bool movingRight = true;
+    [Header("DetecciÃ³n")]
+    public Transform groundCheck;
+    public Transform wallCheck;
+    public float checkDistanceX = 1f;
+    public float checkDistanceY = 0.3f;
+    public LayerMask ayerMaskWall;
+    public Transform transformEnemy;
 
-    private Rigidbody2D rb;//para mover el enemigo
+    Rigidbody2D rb;
+    SpriteRenderer spriteRenderer;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    //
+    void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();//Inicializa el Rigidbody2D
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        transformEnemy = GetComponent<Transform>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        rb.AddForce(Vector2.left * speedWalk);
-    }
 
-    private void FixedUpdate()//Llama fisicas cada cierto tiempo
+    void FixedUpdate()
     {
-        RaycastHit2D informacionSuelo = Physics2D.Raycast(controladorSuelo.position, Vector2.down, distanciaSuelo);//Lanza el rayo hacía abajo desde la posición del controladorSuelo
-        //raycastHit2D genera una liena. Toma la posicion del controladorSuelo, Luego la direccion,hacía abajo y la distancia
-        Debug.DrawRay(controladorSuelo.position, Vector2.down * distanciaSuelo, Color.red);//Dibuja el rayo en la escena
-      
+        // Operador ternario para direcciÃ³n, primer valor si es true, segundo si es false
+        float moveDir = movingRight ? 1f : -1f;
+        rb.linearVelocity = new Vector2(moveDir * speed, rb.linearVelocity.y);// Parametros que recibe el vector2 son x e y
 
-        if (informacionSuelo.collider == false)//Si el rayo no colisiona con nada
+        // Detectar pared y falta de suelo
+        bool hitWall = Physics2D.Raycast(wallCheck.position, movingRight ? Vector2.right : Vector2.left, checkDistanceX, ayerMaskWall);
+        bool noGround = !Physics2D.Raycast(groundCheck.position, Vector2.down, checkDistanceY, ayerMaskWall);
+
+        // Cambiar direcciÃ³n
+        if (hitWall || noGround)
         {
-            Girar();//Llama al metodo girar
+            Flip();
         }
+    }
+
+    private void Update()
+    {
+        // Debug Rays
+        Debug.DrawRay(wallCheck.position, (movingRight ? Vector2.right : Vector2.left) * checkDistanceX, Color.red);
+        //CircleCast
+        Debug.DrawRay(groundCheck.position, Vector2.down * checkDistanceY, Color.blue);
 
     }
 
-    private void Girar()
+    void FlipRaycats()
     {
-        moviminetoDerecha = !moviminetoDerecha;//Cambia el valor de moviminetoDerecha a su valor contrario
-        transform.Rotate(0f, 180f, 0f);//Rota el enemigo 180 grados en el eje Y
-
+        Debug.Log("FlipRaycats");
+        // Invierte solo el tranform (no el sprite)
+        transformEnemy.Rotate(0f, 180f, 0f);
     }
 
-    private void OnDrawGizmos()
+    void Flip()
     {
-        Gizmos.color = Color.red;//Color del gizmo
-        Gizmos.DrawLine(controladorSuelo.transform.position, controladorSuelo.transform.position + Vector3.down * distanciaSuelo);//Dibuja una linea desde la posicion del controladorSuelo hacía abajo hasta la distanciaSuelo
-        //Inicia desde la posicion del controladorSuelo y va hacía abajo la distancia del suelo
+        Debug.Log("Flip");
+        //rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // Detener el movimiento horizontal antes de girar
+        movingRight = !movingRight;
+        // Invierte solo el sprite (no el transform completo)
+        //spriteRenderer.flipX = !spriteRenderer.flipX;
+        Debug.Log("Flip tranform ");
+        // Invierte solo el tranform (no el sprite)
+        transformEnemy.Rotate(0f, 180f, 0f);
     }
 }
