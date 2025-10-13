@@ -4,8 +4,6 @@ using static UnityEngine.UI.Image;
 
 public class Vengefly : MonoBehaviour
 {
-    public float radius = 0.5f;
-    public float distance = 2f;
     public Transform player;//Referencia al jugador 
 
     public float speed = 2f;

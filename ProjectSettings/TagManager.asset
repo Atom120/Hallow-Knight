@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - Enemigo
+  - Puerta
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - UI
   - Suelo
   - Pared
-  - 
+  - DeteccionEnemigo
   - 
   - 
   - 
